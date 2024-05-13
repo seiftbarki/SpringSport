@@ -1,36 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Best Store</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         /* Ajoutez vos styles personnalisés ici */
         body {
             font-family: Arial, sans-serif;
-            background-image: url('/product.webp'); /* Chemin relatif vers votre image de fond */
+            background-image: url('/acceuil.webp'); /* Chemin relatif vers votre image de fond */
             background-size: cover; /* Couvrir tout l'arrière-plan */
             background-repeat: no-repeat; /* Ne pas répéter l'image */
             background-attachment: fixed; /* Fixer l'image de fond lors du défilement */
         }
-        .container {
-            background-color: transparent; /* Couleur de fond semi-transparente pour le contenu */
-            padding: 20px; /* Espacement du contenu */
-            border-radius: 10px; /* Coins arrondis pour le contenu */
+        .product-card {
+            margin-bottom: 20px;
+            border: 1px solid #ccc; /* Ajout d'une bordure */
+            border-radius: 5px; /* Coins arrondis */
+            padding: 10px; /* Espacement interne */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre */
         }
-        .table {
-            background-color: transparent; /* Couleur de fond semi-transparente pour la table */
-
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            max-height: 150px; /* Limite la hauteur de l'image */
+            display: block; /* Pour permettre la mise en forme du margin:auto */
+            margin: auto; /* Centre l'image horizontalement */
         }
-
-        tbody {
-            background-color: transparent; /* Rendre la zone tbody transparente */
-        }
-
-
-        .btn {
-            font-weight: bold;
+        .product-card .card-body {
+            padding: 10px; /* Ajout de rembourrage à la carte */
         }
     </style>
 </head>
@@ -60,51 +59,58 @@
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
                 </li>
-
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+            <form action="/logout" method="post" class="d-flex">
+                <button type="submit" class="btn btn-danger">Déconnexion</button>
+            </form>
         </div>
     </div>
 </nav>
+<div class="container">
+    <!-- Ajouter un message de bienvenue avec le nom de l'utilisateur -->
+    <h2 class="text-center">Bonjour <span th:text="${userName}"></span> !</h2>
+
+    <!-- Le reste du contenu de la page -->
+
+</div>
+
 
 <div class="container">
     <div class="text-center my-4"><h1 style="color: blue;">My List For Product</h1></div>
-    <a class="btn btn-primary mb-3" href="/products/create">Create Product</a>
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Image</th>
-            <th>Created At</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="product : ${products}">
-            <td th:text="${product.id}"></td>
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.brand}"></td>
-            <td th:text="${product.category}"></td>
-            <td th:text="${product.price + '$'}"></td>
-            <td>
-                <img th:src="@{/images/{imageFileName}(imageFileName=${product.imageFileName})}"
-                     alt="Product Image" width="100">
-            </td>
-            <td th:text="${#strings.substring(product.createdAt, 0, 10)}"></td>
-            <td style="white-space: nowrap">
-                <a class="btn btn-primary btn-sm me-2" th:href="@{/products/edit(id=${product.id})}">Edit</a>
-                <a class="btn btn-danger btn-sm" th:href="@{/products/delete(id=${product.id})}" onclick="return confirm('Are You Sure?')">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div th:each="product : ${products}" class="col">
+            <div class="product-card">
+                <img th:src="@{/images/{imageFileName}(imageFileName=${product.imageFileName})}" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}"></h5>
+                    <p class="card-text" th:text="${product.price + '$'}"></p>
+                    <a href="#" class="btn btn-primary me-2">View Details</a>
+                    <a href="#" class="btn btn-success">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="text-center my-4"><h1 style="color: blue;">Abonnements</h1></div>
+
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div th:each="abonnement : ${abonnements}" class="col">
+            <div class="product-card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${abonnement.name}"></h5>
+                    <p class="card-text" th:text="${abonnement.price + '$'}"></p>
+                    <!-- Ajoutez d'autres informations sur l'abonnement si nécessaire -->
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

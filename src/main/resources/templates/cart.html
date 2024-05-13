@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+<body>
+<div class="container">
+    <h1>Your Cart</h1>
+    <div id="cart-items">
+        <ul>
+            <li th:each="product : ${cart}">
+                <p><strong th:text="${product.name}"></strong></p>
+                <p th:text="${product.price}"></p>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

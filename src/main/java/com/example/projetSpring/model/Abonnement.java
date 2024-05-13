@@ -8,11 +8,10 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Admin {
+public class Abonnement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String email;
-    private String username;
-    private String password;
+private int id;
+private String name;
+private int price;
 }

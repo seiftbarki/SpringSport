@@ -9,26 +9,19 @@
         /* Ajoutez vos styles personnalisés ici */
         body {
             font-family: Arial, sans-serif;
-            background-image: url('/product.webp'); /* Chemin relatif vers votre image de fond */
+            background-image: url('public/images/image.jpg'); /* Chemin relatif vers votre image de fond */
             background-size: cover; /* Couvrir tout l'arrière-plan */
             background-repeat: no-repeat; /* Ne pas répéter l'image */
             background-attachment: fixed; /* Fixer l'image de fond lors du défilement */
         }
         .container {
-            background-color: transparent; /* Couleur de fond semi-transparente pour le contenu */
+            background-color: rgba(255, 255, 255, 0.8); /* Couleur de fond semi-transparente pour le contenu */
             padding: 20px; /* Espacement du contenu */
             border-radius: 10px; /* Coins arrondis pour le contenu */
         }
         .table {
-            background-color: transparent; /* Couleur de fond semi-transparente pour la table */
-
+            background-color: rgba(255, 255, 255, 0.9); /* Couleur de fond semi-transparente pour la table */
         }
-
-        tbody {
-            background-color: transparent; /* Rendre la zone tbody transparente */
-        }
-
-
         .btn {
             font-weight: bold;
         }
@@ -71,36 +64,31 @@
 </nav>
 
 <div class="container">
-    <div class="text-center my-4"><h1 style="color: blue;">My List For Product</h1></div>
-    <a class="btn btn-primary mb-3" href="/products/create">Create Product</a>
+    <div class="text-center my-4"><h1 style="color: blue;">My List For Users</h1></div>
+    <a class="btn btn-primary mb-3" href="/users/create">Create user</a>
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Brand</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Image</th>
-            <th>Created At</th>
-            <th>Action</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Phone Number</th>
+            <th>Password</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="product : ${products}">
-            <td th:text="${product.id}"></td>
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.brand}"></td>
-            <td th:text="${product.category}"></td>
-            <td th:text="${product.price + '$'}"></td>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.age}"></td>
+            <td th:text="${user.phoneNumber}"></td>
+            <td th:text="${user.password}"></td>
             <td>
-                <img th:src="@{/images/{imageFileName}(imageFileName=${product.imageFileName})}"
-                     alt="Product Image" width="100">
-            </td>
-            <td th:text="${#strings.substring(product.createdAt, 0, 10)}"></td>
-            <td style="white-space: nowrap">
-                <a class="btn btn-primary btn-sm me-2" th:href="@{/products/edit(id=${product.id})}">Edit</a>
-                <a class="btn btn-danger btn-sm" th:href="@{/products/delete(id=${product.id})}" onclick="return confirm('Are You Sure?')">Delete</a>
+                <a class="btn btn-primary btn-sm me-2" th:href="@{/users/edit(id=${user.id})}">Edit</a>
+                <a class="btn btn-danger btn-sm" th:href="@{/users/delete(id=${user.id})}" onclick="return confirm('Are You Sure?')">Delete</a>
             </td>
         </tr>
         </tbody>

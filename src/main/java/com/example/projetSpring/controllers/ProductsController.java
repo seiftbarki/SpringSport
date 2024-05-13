@@ -33,6 +33,7 @@ public class ProductsController {
         model.addAttribute("products",products);
         return "products/index";
     }
+
     @GetMapping("/create")
     public String showCreatePage(Model model) {
         ProductDto productDto = new ProductDto();
