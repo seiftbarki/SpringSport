@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Store</title>
+    <title>UltGYM</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         /* Ajoutez vos styles personnalisés ici */
@@ -31,12 +31,19 @@
         .product-card .card-body {
             padding: 10px; /* Ajout de rembourrage à la carte */
         }
+        .bg-blur {
+            background-color: rgba(255, 255, 255, 0.2); /* Couleur de fond avec transparence */
+            backdrop-filter: blur(10px);/* Effet de flou */
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 40px;
+        }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Products</a>
+        <a class="navbar-brand" href="#">ULT GYM</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -46,18 +53,10 @@
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Link
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
+                    <form action="/cart" method="get">
+                        <input type="hidden" name="userId" th:value="${userId}" />
+                        <button type="submit" class="nav-link active">Panier</button>
+                    </form>
                 </li>
             </ul>
             <form class="d-flex" role="search">
@@ -72,47 +71,61 @@
 </nav>
 <div class="container">
     <!-- Ajouter un message de bienvenue avec le nom de l'utilisateur -->
-    <h2 class="text-center">Bonjour <span th:text="${userName}"></span> !</h2>
-
+    <div class="card bg-blur my-4">
+        <div class="card-body">
+            <h2 class="text-center card-title">Hello <span th:text="${userName}"></span> !</h2>
+        </div>
+    </div>
     <!-- Le reste du contenu de la page -->
-
 </div>
-
-
 <div class="container">
-    <div class="text-center my-4"><h1 style="color: blue;">My List For Product</h1></div>
-
+    <div class="container-fluid">
+        <div class="card bg-blur mt-4 mx-auto" style="max-width: 40%;">
+            <div class="card-body text-center p-2">
+                <h1 style="color: aquamarine;">My List For Product</h1>
+            </div>
+        </div>
+    </div>
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <div th:each="product : ${products}" class="col">
-            <div class="product-card">
+            <div class="product-card bg-blur">
                 <img th:src="@{/images/{imageFileName}(imageFileName=${product.imageFileName})}" alt="Product Image">
-                <div class="card-body">
+                <div class="card-body bg-blur">
                     <h5 class="card-title" th:text="${product.name}"></h5>
                     <p class="card-text" th:text="${product.price + '$'}"></p>
-                    <a href="#" class="btn btn-primary me-2">View Details</a>
-                    <a href="#" class="btn btn-success">Add to Cart</a>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a th:href="@{'/products/details/' + ${product.id}}" class="btn btn-primary me-2">View Details</a>
+                        <form action="/addToCart" method="post">
+                            <input type="hidden" name="userId" th:value="${userId}" />
+                            <input type="hidden" name="productId" th:value="${product.id}" />
+                            <button type="submit" class="btn btn-success">Add to Cart</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div class="container">
-    <div class="text-center my-4"><h1 style="color: blue;">Abonnements</h1></div>
-
+    <div class="container-fluid">
+        <div class="card bg-blur mt-4 mx-auto" style="max-width: 40%;">
+            <div class="card-body text-center  p-2">
+                <h1 style="color: aquamarine;">Abonnement</h1>
+            </div>
+        </div>
+    </div>
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <div th:each="abonnement : ${abonnements}" class="col">
-            <div class="product-card">
+            <div class="product-card bg-blur">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${abonnement.name}"></h5>
                     <p class="card-text" th:text="${abonnement.price + '$'}"></p>
-                    <!-- Ajoutez d'autres informations sur l'abonnement si nécessaire -->
+                    <a href="#" class="btn btn-info">Abonné</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

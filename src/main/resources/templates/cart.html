@@ -4,18 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* Style du conteneur avec contour flou */
+        .blur-container {
+            margin-top: 100px;
+            backdrop-filter: blur(10px); /* Applique un flou de 10px */
+            background-color: rgba(255, 255, 255, 0.5); /* Arrière-plan semi-transparent */
+            border-radius: 10px; /* Coins arrondis */
+            padding: 20px; /* Espacement intérieur */
+        }
+        body {
+            font-family: Arial, sans-serif;
+            padding-top: 50px; /* Espacement en haut de la page */
+            background-image: url('/Workout.png'); /* Chemin relatif vers votre image de fond */
+            background-size: cover; /* Couvrir tout l'arrière-plan */
+            background-repeat: no-repeat; /* Ne pas répéter l'image */
+            background-attachment: fixed; /* Fixer l'image de fond lors du défilement */
+        }
+
+
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Your Cart</h1>
-    <div id="cart-items">
-        <ul>
-            <li th:each="product : ${cart}">
-                <p><strong th:text="${product.name}"></strong></p>
-                <p th:text="${product.price}"></p>
-            </li>
-        </ul>
+<div class="blur-container">
+    <h1 class="text-center">Panier</h1>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Afficher chaque produit dans le panier -->
+                <tr th:each="product, index : ${cartProducts}">
+                    <th scope="row" th:text="${index.index + 1}"></th>
+                    <td th:text="${product.name}"></td>
+                    <td class="product-price" th:text="${product.price}"></td>
+                    <td><input type="number" class="quantity-input" value="1" min="1"></td>
+                    <td class="total-price" th:text="${product.price}"></td>
+                    <!-- Ajouter le bouton Supprimer avec un lien vers l'URL de suppression -->
+                    <td>
+                        <a th:href="@{/cart/delete/{productId}(productId=${product.id}, userId=${userId})}" class="btn btn-danger">Supprimer</a>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="4" style="text-align: right;">Total:</td>
+                    <td id="total-cart-price">0.00</td>
+
+
+
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
+    <a class="btn btn-primary mb-3" href="/acceuilUser">retour</a>
 </div>
+
+
+<!-- Inclure les scripts JavaScript Bootstrap ou d'autres scripts personnalisés ici -->
+<script>
+    // Récupérer tous les champs d'entrée de quantité
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+
+    // Ajouter un écouteur d'événement à chaque champ d'entrée de quantité
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', updateTotalPrice);
+    });
+
+    // Calculer le prix total des produits lors du chargement de la page
+    window.onload = function() {
+        updateCartTotal();
+    };
+
+    // Fonction pour mettre à jour le prix total en fonction de la quantité sélectionnée
+    function updateTotalPrice() {
+        const row = this.parentElement.parentElement;
+        const productPrice = parseFloat(row.querySelector('.product-price').innerText);
+        const quantity = parseInt(this.value);
+        const totalPrice = productPrice * quantity;
+        row.querySelector('.total-price').innerText = totalPrice.toFixed(2);
+
+        // Mettre à jour le prix total du panier
+        updateCartTotal();
+    }
+
+    // Fonction pour mettre à jour le prix total du panier
+    function updateCartTotal() {
+        const totalPrices = Array.from(document.querySelectorAll('.total-price')).map(price => parseFloat(price.innerText));
+        const totalPrice = totalPrices.reduce((acc, curr) => acc + curr, 0);
+        document.getElementById('total-cart-price').innerText = totalPrice.toFixed(2);
+    }
+</script>
 </body>
 </html>

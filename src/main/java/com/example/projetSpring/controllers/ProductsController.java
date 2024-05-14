@@ -173,6 +173,19 @@ public class ProductsController {
         return "redirect:/products";
     }
 
+    @GetMapping("/details/{id}")
+    public String showProductDetails(Model model, @PathVariable int id) {
+        try {
+            Product product = repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+            model.addAttribute("product", product);
+            return "products/details";
+        } catch (Exception ex) {
+            System.out.println("Exception:" + ex.getMessage());
+            return "redirect:/acceuilUser";
+        }
+    }
+
+
 
 
 

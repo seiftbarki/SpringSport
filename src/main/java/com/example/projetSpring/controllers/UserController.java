@@ -23,10 +23,16 @@ public class UserController {
 
     @GetMapping({"", "/"})
     public String showUserList(Model model){
-        List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        // Récupérer tous les utilisateurs sauf celui avec l'ID 1
+        List<User> users = userRepository.findByIdNot(1); // Supposons que votre ID soit de type Long
+
+        // Ajouter les utilisateurs à l'objet Model
         model.addAttribute("users", users);
+
+        // Retourner la vue "users/index"
         return "users/index";
     }
+
 
     @GetMapping("/create")
     public String showCreatePage(Model model) {
