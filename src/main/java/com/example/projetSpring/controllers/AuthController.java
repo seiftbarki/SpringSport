@@ -31,6 +31,7 @@ public class AuthController {
     private UsersRepository repoUser;
 
 
+
     @Autowired
     public AuthController(UserAuthService userAuthService) {
         this.userAuthService = userAuthService;
@@ -110,6 +111,7 @@ public class AuthController {
         // Redirection vers la page du panier
         return "redirect:/cart?userId=" + userId;
     }
+
 
 
 

@@ -91,32 +91,32 @@ public class UserController {
         return "users/EditUser";
     }
 
+
     @PostMapping("/edit")
     public String updateUser(
-            Model model,
-            @RequestParam int id,
-            @Valid @ModelAttribute UserDto userDto,
+            @ModelAttribute User user,
+            @RequestParam(value = "password", required = false) String password,
             BindingResult result) {
         try {
-            User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-            model.addAttribute("user", user);
-
             if (result.hasErrors()) {
                 return "users/EditUser";
             }
 
-            user.setName(userDto.getName());
-            user.setEmail(userDto.getEmail());
-            user.setAge(userDto.getAge());
-            user.setPhoneNumber(userDto.getPhoneNumber());
-            user.setPassword(userDto.getPassword());
+            // Vérifiez si l'utilisateur existe dans la base de données (optionnel)
+
+            // Si un nouveau mot de passe est fourni, mettez à jour le mot de passe de l'utilisateur
+            if (password != null && !password.isEmpty()) {
+                // Vous devez gérer le hachage du mot de passe ici avant de le définir
+                user.setPassword(password);
+            }
 
             userRepository.save(user);
         } catch (Exception ex) {
-            System.out.println("Exception:" + ex.getMessage());
+            System.out.println("Exception :" + ex.getMessage());
         }
         return "redirect:/users";
     }
+
 
 
     @GetMapping("/delete")
